@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- ==================== META Y FUENTES ==================== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Web boda Sara y Víctor. Agenda, información, música, y más.">
+  <meta name="keywords" content="boda, Sara, Víctor, agenda, Asistencia, música, media, información, guestbook">
+  <title>Sara y Víctor</title>
+  <!-- Importación de fuentes de Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- ==================== ESTILOS CSS ==================== -->
+  <style>
+    /* Variables CSS para personalización rápida */
+    :root {
+      --primary-color: #1A374D;        /* Azul marino elegante */
+      --secondary-color: #406882;      /* Azul medio */
+      --accent-color: #E0FBFC;         /* Toque fresco, primaveral */
+      --background-color: #F1F6F9;      /* Fondo claro */
+      --text-color: #333333;
+      --header-bg: rgba(255, 255, 255, 0.95);
+      --transition-speed: 0.3s;
+      --font-title: 'Playfair Display', serif;
+      --font-body: 'Montserrat', sans-serif;
+    }
+    
+    /* Clase para ocultar elementos */
+    .hidden {
+      display: none;
+    }
+    
+    /* Reset y estilos base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+    a {
+      text-decoration: none;
+      color: var(--primary-color);
+    }
+    img {
+      max-width: 100%;
+      display: block;
+    }
+    
+    /* ==================== CABECERA Y NAVEGACIÓN ==================== */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: var(--header-bg);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 20px;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 60px;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+    }
+    .nav-links li {
+      margin-left: 20px;
+    }
+    .nav-links a:hover {
+      color: var(--secondary-color);
+    }
+    /* Menú hamburguesa para móviles (<768px) */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .hamburger span {
+      height: 3px;
+      width: 25px;
+      background: var(--primary-color);
+      margin-bottom: 4px;
+      border-radius: 5px;
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background: var(--header-bg);
+        display: none;
+      }
+      .nav-links li {
+        margin: 15px 0;
+        text-align: center;
+      }
+      .hamburger {
+        display: flex;
+      }
+    }
+    
+    /* ==================== BOTÓN ESTILIZADO ==================== */
+    .btn {
+      display: inline-block;
+      background: var(--primary-color);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 4px;
+      transition: background var(--transition-speed);
+      text-decoration: none;
+      margin-top: 20px;
+    }
+    .btn:hover {
+      background: var(--secondary-color);
+    }
+    
+    /* ==================== SECCIÓN HERO ==================== */
+    .hero {
+      height: 100vh;
+      background-image: url('https://via.placeholder.com/1920x1080'); /* REEMPLAZA con tu imagen de fondo */
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      color: #fff;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      animation: fadeIn 2s ease-in;
+    }
+    .hero h1 {
+      font-family: var(--font-title);
+      font-size: 4rem;
+      margin-bottom: 20px;
+      /* Efecto para letras más bonitas */
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+    }
+    .hero #countdown {
+      font-size: 1rem; /* Contador más pequeño */
+      background: rgba(0,0,0,0.5);
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* ==================== ESTILOS GENERALES DE SECCIONES ==================== */
+    section {
+      padding: 60px 0;
+    }
+    section h2 {
+      font-family: var(--font-title);
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 40px;
+      color: var(--primary-color);
+    }
+    
+    /* ==================== SECCIÓN TIMELINE ==================== */
+    .timeline {
+      position: relative;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 100%;
+      background: var(--secondary-color);
+    }
+    .timeline-event {
+      position: relative;
+      width: 50%;
+      padding: 20px;
+    }
+    .timeline-event:nth-child(odd) {
+      left: 0;
+      text-align: right;
+    }
+    .timeline-event:nth-child(even) {
+      left: 50%;
+      text-align: left;
+    }
+    .timeline-event::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      width: 20px;
+      height: 20px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      border: 4px solid var(--accent-color);
+    }
+    .timeline-event:nth-child(odd)::after {
+      right: -10px;
+    }
+    .timeline-event:nth-child(even)::after {
+      left: -10px;
+    }
+    
+    /* ==================== SECCIÓN MEDIA ==================== */
+    #media {
+      text-align: center;
+    }
+    
+    /* ==================== SECCIÓN INFORMACIÓN CON TABS ==================== */
+    #info {
+      padding: 20px 0;
+    }
+    .info-tabs {
+      margin-top: 20px;
+    }
+    .tab-buttons {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      padding: 0;
+    }
+    .tab-buttons li {
+      padding: 10px 20px;
+      background: var(--primary-color);
+      color: #fff;
+      margin: 0 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background var(--transition-speed);
+    }
+    .tab-buttons li:hover {
+      background: var(--secondary-color);
+    }
+    .tab-buttons li.active {
+      background: var(--secondary-color);
+    }
+    .tab-content .tab-panel {
+      display: none;
+      text-align: left;
+    }
+    .tab-content .tab-panel.active {
+      display: block;
+    }
+    
+    /* ==================== SECCIÓN ASISTENCIA (RSVP) ==================== */
+    #Asistencia {
+      text-align: center;
+    }
+    
+    /* ==================== SECCIÓN GUESTBOOK ==================== */
+    .guestbook {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+    .guestbook form {
+      display: flex;
+      flex-direction: column;
+    }
+    .guestbook input, .guestbook textarea {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .guestbook button {
+      padding: 10px;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background var(--transition-speed);
+    }
+    .guestbook button:hover {
+      background: var(--secondary-color);
+    }
+    
+    /* ==================== SECCIÓN HASHTAG ==================== */
+    .hashtag {
+      text-align: center;
+      font-size: 1.8rem;
+      font-family: var(--font-title);
+      color: var(--primary-color);
+      padding: 20px;
+      border-top: 2px solid var(--secondary-color);
+      margin-top: 40px;
+    }
+    
+    /* ==================== MODAL PARA ASISTENCIA ==================== */
+    .modal {
+      display: none; /* Oculto por defecto */
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      position: relative;
+    }
+    .close-modal {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #aaa;
+      cursor: pointer;
+    }
+    .close-modal:hover {
+      color: #000;
+    }
+    .modal form label {
+      display: block;
+      margin-top: 10px;
+    }
+    .modal form input,
+    .modal form textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    /* Estilo para los campos tipo toggle */
+    #rsvpAccompaniment, #rsvpChildren {
+      cursor: pointer;
+      background-color: #f5f5f5;
+    }
+    /* Estilos para la sección de niños */
+    .child-entry {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      position: relative;
+    }
+    .child-entry label {
+      display: block;
+      margin-top: 5px;
+    }
+    .child-entry input {
+      width: 100%;
+      padding: 5px;
+      margin-top: 3px;
+    }
+    .remove-child {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- ==================== CABECERA Y NAVEGACIÓN ==================== -->
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">
+          <a href="#">S&V</a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="#hero">Inicio</a></li>
+          <li><a href="#timeline">Agenda</a></li>
+          <li><a href="#Asistencia">Asistencia</a></li>
+          <li><a href="#spotify">Música</a></li>
+          <li><a href="#media">Media</a></li>
+          <li><a href="#info">Información</a></li>
+          <li><a href="#guestbook">Guestbook</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- ==================== SECCIÓN HERO ==================== -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <h1>Sara & Víctor</h1>
+      <div id="countdown">Cargando cuenta regresiva...</div>
+    </div>
+  </section>
+  
+  <!-- ==================== SECCIÓN TIMELINE ==================== -->
+  <section id="timeline">
+    <div class="container">
+      <h2>Agenda del Día</h2>
+      <div class="timeline">
+        <!-- Eventos de la línea de tiempo (modifica según tu horario) -->
+        <div class="timeline-event">
+          <h3>12:00 - Ceremonia</h3>
+          <p>Inicio de la ceremonia en la iglesia.</p>
+        </div>
+        <div class="timeline-event">
+          <h3>13:30 - Recepción</h3>
+          <p>Celebración y banquete.</p>
+        </div>
+        <div class="timeline-event">
+          <h3>15:00 - Brindis</h3>
+          <p>Brindis y discursos.</p>
+        </div>
+        <div class="timeline-event">
+          <h3>17:00 - Baile</h3>
+          <p>Inicio del baile.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- ==================== SECCIÓN ASISTENCIA (RSVP) ==================== -->
+  <section id="Asistencia">
+    <div class="container">
+      <h2>Confirmar Asistencia</h2>
+      <!-- Botón que abre el cuestionario de asistencia -->
+      <button id="openRSVP" class="btn">Confirmar Asistencia</button>
+    </div>
+  </section>
+  
+  <!-- ==================== SECCIÓN MÚSICA ==================== -->
+  <section id="spotify">
+    <div class="container">
+      <h2>Sugerencias Musicales</h2>
+      <p>Agrega tus canciones para sorprendernos. ¡No podrás ver la lista ni acceder a ella!</p>
+      <form id="songForm">
+        <input type="text" id="songSuggestion" placeholder="Nombre o URL de la canción" required>
+        <button type="submit" class="btn">Agregar Canción</button>
+      </form>
+    </div>
+  </section>
+  
+  <!-- ==================== SECCIÓN MEDIA ==================== -->
+  <section id="media">
+    <div class="container">
+      <h2>Media</h2>
+      <p>Sube tus fotos y comparte tus momentos con nosotros en nuestra nube compartida.</p>
+      <!-- REEMPLAZA "YOUR_SHARED_CLOUD_URL" con la URL de tu carpeta compartida -->
+      <a href="YOUR_SHARED_CLOUD_URL" target="_blank" class="btn">Accede aquí</a>
+    </div>
+  </section>
+  
+  <!-- ==================== SECCIÓN INFORMACIÓN CON TABS ==================== -->
+  <section id="info">
+    <div class="container">
+      <h2>Información</h2>
+      <div class="info-tabs">
+        <!-- Botones o pestañas -->
+        <ul class="tab-buttons">
+          <li class="active" data-tab="vestimenta">Código de vestimenta</li>
+          <li data-tab="guaguas">Guaguas</li>
+          <li data-tab="regalos">Regalos</li>
+          <li data-tab="ubicacion">Ubicación</li>
+        </ul>
+        <!-- Contenedor de contenido de pestañas -->
+        <div class="tab-content">
+          <div id="vestimenta" class="tab-panel active">
+            <h3>Código de vestimenta</h3>
+            <p>
+              Aquí encontrarás los detalles sobre el código de vestimenta para la boda. Puedes incluir ejemplos, recomendaciones o imágenes de referencia.
+            </p>
+          </div>
+          <div id="guaguas" class="tab-panel">
+            <h3>Guaguas</h3>
+            <p>
+              Información sobre los autobuses (guaguas) que estarán disponibles para trasladar a los invitados.
+            </p>
+          </div>
+          <div id="regalos" class="tab-panel">
+            <h3>Regalos</h3>
+            <p>
+              Detalles y sugerencias sobre regalos o cómo acceder a la lista de regalos.
+            </p>
+          </div>
+          <div id="ubicacion" class="tab-panel">
+            <h3>Ubicación</h3>
+            <p>
+              Aquí encontrarás la ubicación del evento, instrucciones para llegar y otros detalles importantes.
+            </p>
+            <!-- Opcional: Inserta aquí un mapa o imagen representativa -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- ==================== SECCIÓN GUESTBOOK ==================== -->
+  <section id="guestbook">
+    <div class="container">
+      <h2>Guestbook</h2>
+      <div class="guestbook">
+        <form id="guestbookForm">
+          <input type="text" id="name" placeholder="Tu nombre" required>
+          <textarea id="comment" rows="4" placeholder="Tu comentario" required></textarea>
+          <button type="submit">Enviar</button>
+        </form>
+        <div id="guestbookComments">
+          <!-- Los comentarios se añadirán aquí -->
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- ==================== SECCIÓN HASHTAG ==================== -->
+  <section class="hashtag">
+    <p>#SaraYVictor2025</p>
+  </section>
+  
+  <!-- ==================== MODAL PARA ASISTENCIA (RSVP) ==================== -->
+  <div id="rsvpModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3>Confirmar Asistencia</h3>
+      <form id="rsvpForm">
+        <label for="rsvpFullName">Nombre y Apellidos:</label>
+        <input type="text" id="rsvpFullName" required>
+        
+        <label for="rsvpEmail">Email:</label>
+        <input type="email" id="rsvpEmail" required>
+        
+        <label for="rsvpAccompaniment">¿Traes acompañante?</label>
+        <!-- Campo tipo toggle: al hacer clic alterna entre "No" y "Sí" -->
+        <input type="text" id="rsvpAccompaniment" value="No" readonly style="cursor:pointer;">
+        
+        <div id="accompanimentNameContainer" class="hidden">
+          <label for="rsvpAccompanimentName">Nombre y Apellidos del Acompañante:</label>
+          <input type="text" id="rsvpAccompanimentName">
+        </div>
+        
+        <!-- Nueva opción: Niños -->
+        <label for="rsvpChildren">¿Traes niños?</label>
+        <input type="text" id="rsvpChildren" value="No" readonly style="cursor:pointer;">
+        
+        <div id="childrenContainer" class="hidden">
+          <button type="button" id="addChild" class="btn">Agregar niño</button>
+          <div id="childrenList"></div>
+        </div>
+        
+        <label for="rsvpDiet">Requerimientos de alimentación (opcional):</label>
+        <textarea id="rsvpDiet" rows="3" placeholder="Ejemplo: sin gluten, vegano, etc."></textarea>
+        
+        <button type="submit" class="btn">Enviar Confirmación</button>
+      </form>
+    </div>
+  </div>
+  
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    // --- Smooth-scroll para navegación ---
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+    
+    // --- Toggle del menú hamburguesa en móviles ---
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+    });
+    
+    // --- Contador regresivo ---
+    const weddingDate = new Date('2025-09-13T13:30:00');
+    const countdownElement = document.getElementById('countdown');
+    function updateCountdown() {
+      const now = new Date();
+      const diff = weddingDate - now;
+      if (diff <= 0) {
+        countdownElement.textContent = "¡La boda ya empezó!";
+        clearInterval(countdownInterval);
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      countdownElement.textContent = days + " días " + hours + " horas " + minutes + " minutos " + seconds + " segundos";
+    }
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+    
+    // --- Envío del formulario del Guestbook ---
+    const guestbookForm = document.getElementById('guestbookForm');
+    const guestbookComments = document.getElementById('guestbookComments');
+    guestbookForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const comment = document.getElementById('comment').value;
+      const commentDiv = document.createElement('div');
+      commentDiv.style.borderBottom = '1px solid #ccc';
+      commentDiv.style.margin = '10px 0';
+      commentDiv.innerHTML = '<strong>' + name + ':</strong><p>' + comment + '</p>';
+      guestbookComments.appendChild(commentDiv);
+      alert('¡Comentario enviado!');
+      guestbookForm.reset();
+    });
+    
+    // --- Funcionalidad para los Tabs en la sección Información ---
+    document.querySelectorAll('.tab-buttons li').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.tab-buttons li').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+        button.classList.add('active');
+        const tabId = button.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+    
+    // --- Funcionalidad Modal para Asistencia ---
+    const rsvpModal = document.getElementById('rsvpModal');
+    const openRSVPButton = document.getElementById('openRSVP');
+    const closeModal = document.querySelector('.close-modal');
+    openRSVPButton.addEventListener('click', () => {
+      rsvpModal.style.display = 'block';
+    });
+    closeModal.addEventListener('click', () => {
+      rsvpModal.style.display = 'none';
+    });
+    window.addEventListener('click', (event) => {
+      if (event.target === rsvpModal) {
+        rsvpModal.style.display = 'none';
+      }
+    });
+    
+    // --- Funcionalidad para el toggle del campo "¿Traes acompañante?" ---
+    const rsvpAccompaniment = document.getElementById('rsvpAccompaniment');
+    const accompanimentNameContainer = document.getElementById('accompanimentNameContainer');
+    function updateAccompanimentField() {
+      if (rsvpAccompaniment.value === "Sí") {
+         accompanimentNameContainer.style.display = 'block';
+         document.getElementById('rsvpAccompanimentName').required = true;
+      } else {
+         accompanimentNameContainer.style.display = 'none';
+         document.getElementById('rsvpAccompanimentName').required = false;
+      }
+    }
+    rsvpAccompaniment.addEventListener('click', function() {
+      this.value = this.value === "No" ? "Sí" : "No";
+      updateAccompanimentField();
+    });
+    
+    // --- Funcionalidad para el toggle del campo "¿Traes niños?" ---
+    const rsvpChildren = document.getElementById('rsvpChildren');
+    const childrenContainer = document.getElementById('childrenContainer');
+    function updateChildrenField() {
+      if (rsvpChildren.value === "Sí") {
+         childrenContainer.style.display = 'block';
+      } else {
+         childrenContainer.style.display = 'none';
+         // Limpiar los registros de niños si se cambia a "No"
+         document.getElementById('childrenList').innerHTML = '';
+      }
+    }
+    rsvpChildren.addEventListener('click', function() {
+      this.value = this.value === "No" ? "Sí" : "No";
+      updateChildrenField();
+    });
+    
+    // --- Agregar registro de niño ---
+    const addChildBtn = document.getElementById('addChild');
+    const childrenList = document.getElementById('childrenList');
+    addChildBtn.addEventListener('click', () => {
+      const childDiv = document.createElement('div');
+      childDiv.className = 'child-entry';
+      childDiv.innerHTML = `
+        <button type="button" class="remove-child">&times;</button>
+        <label>Nombre y Apellidos:</label>
+        <input type="text" name="childName[]" required>
+        <label>Edad:</label>
+        <input type="number" name="childAge[]" min="0" required>
+      `;
+      childrenList.appendChild(childDiv);
+      childDiv.querySelector('.remove-child').addEventListener('click', () => {
+        childrenList.removeChild(childDiv);
+      });
+    });
+    
+    // --- Envío del formulario de Asistencia ---
+    const rsvpForm = document.getElementById('rsvpForm');
+    rsvpForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('¡Asistencia confirmada!');
+      rsvpForm.reset();
+      rsvpModal.style.display = 'none';
+      // Opcional: Aquí podrías integrar una llamada AJAX para enviar los datos a tu servidor.
+    });
+    
+    // --- Funcionalidad para el formulario de Sugerencias Musicales ---
+    const songForm = document.getElementById('songForm');
+    songForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const song = document.getElementById('songSuggestion').value;
+      alert('¡Canción sugerida: ' + song + '!');
+      songForm.reset();
+      // Opcional: Aquí podrías enviar la sugerencia a un servidor para almacenar las canciones.
+    });
+    
+    /* 
+      INSTRUCCIONES:
+      - Reemplaza las URLs de los iframe (si aplica) y cualquier placeholder (imagen de fondo, etc.) con tus propios enlaces.
+      - Modifica las variables CSS en :root para cambiar colores, fuentes y otros estilos.
+      - Actualiza la fecha de la boda en el contador regresivo.
+      - Para hosting, considera servicios como Netlify, Vercel o GitHub Pages.
+      - Para registrar tu dominio, opciones como Namecheap o GoDaddy son recomendables.
+    */
+  </script>
+</body>
+</html>
